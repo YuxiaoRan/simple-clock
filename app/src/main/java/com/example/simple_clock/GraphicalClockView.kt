@@ -33,6 +33,7 @@ class GraphicalClockView: View {
         private val WIDTH_MIN_HAND = 1.2f
         private val WIDTH_SEC_HAND = 0.8f
         private val SEC_IN_MILLIS = 1000L
+        private val FULL_ROTATE = 360f
     }
 
     private val paint = Paint()
@@ -98,8 +99,36 @@ class GraphicalClockView: View {
         super.onDraw(canvas)
         drawCompass(canvas)
         drawNums(canvas)
-        drawMinHand(canvas)
-        drawSecHand(canvas)
+        drawMinHandWithRotation(canvas)
+        drawSecHandWithRotation(canvas)
+        //drawMinHand(canvas)
+        //drawSecHand(canvas)
+    }
+
+    private fun drawMinHandWithRotation(canvas: Canvas) {
+        canvas.save()
+        val center = radius + STROKE_WIDTH
+        paint.color = COLOR_MIN_HAND
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = STROKE_WIDTH * WIDTH_MIN_HAND
+        val angle = minHandStartsAt.toFloat() / TOTAL_NUM * FULL_ROTATE
+        println(angle)
+        canvas.rotate(angle, center, center)
+        canvas.drawLine(center, center, center, center - minHandLength, paint)
+        canvas.restore()
+    }
+
+    private fun drawSecHandWithRotation(canvas: Canvas) {
+        canvas.save()
+        val center = radius + STROKE_WIDTH
+        paint.color = COLOR_SEC_HAND
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = STROKE_WIDTH * WIDTH_SEC_HAND
+        val angle = secHandStartsAt.toFloat() / TOTAL_NUM * FULL_ROTATE
+        println(angle)
+        canvas.rotate(angle, center, center)
+        canvas.drawLine(center, center, center, center - secHandLength, paint)
+        canvas.restore()
     }
 
     private fun refresh() {
